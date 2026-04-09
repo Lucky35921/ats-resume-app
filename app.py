@@ -249,6 +249,7 @@ SKILL_RESOURCES = {
 
 # ----------------------------
 # BASE LATEX FOR AI MODE
+# Put your FULL base resume here
 # ----------------------------
 BASE_RESUME_LATEX = r"""
 \documentclass[a4paper,10pt]{article}
@@ -272,7 +273,7 @@ Grand Rapids, MI \;|\; (616) 329-4914 \;|\; vlakshmanarao216@gmail.com \;|\;
 \end{center}
 
 \section*{Professional Summary}
-Data Analyst with 2+ years of experience specializing in KPI reporting, pricing analytics, and business intelligence. Proven ability to analyze large datasets (50K–200K+ records), automate reporting workflows, and deliver actionable insights that drive 8–40\% improvements in efficiency and performance. Skilled in SQL, Python, Excel, and Power BI with a strong focus on data-driven decision making.
+Data Analyst with 2+ years of experience specializing in KPI reporting, pricing analytics, and business intelligence. Proven ability to analyze large datasets (50K--200K+ records), automate reporting workflows, and deliver actionable insights that drive 8--40\% improvements in efficiency and performance. Skilled in SQL, Python, Excel, and Power BI with a strong focus on data-driven decision making.
 
 \section*{Technical Skills}
 \begin{itemize}[leftmargin=*]
@@ -288,6 +289,75 @@ Scikit-learn, XGBoost, Regression, Classification, Hypothesis Testing, A/B Testi
 AWS (S3, EC2, Redshift), Azure (Data Factory, Azure SQL), Git, Jupyter Notebook
 \item \textbf{Analytics \& Reporting:}
 Data Cleaning, Data Validation, Trend Analysis, Root Cause Analysis, Predictive Analytics, Descriptive Analytics, Stakeholder Communication, Process Improvement
+\end{itemize}
+
+\section*{Professional Experience}
+
+\textbf{Data Analyst, Slash Mark IT Solutions Pvt. Ltd., Hyderabad, India}
+\hfill \textit{Jul 2023 -- Jul 2024}
+\begin{itemize}[leftmargin=*]
+\item Automated KPI reporting pipelines using SQL, Python, and Excel across 100K+ records, reducing manual reporting effort by 40\% and accelerating decision-making timelines.
+\item Examined 50K--200K records to identify pricing gaps, assortment inefficiencies, and portfolio opportunities, enabling data-driven business decisions.
+\item Built interactive Power BI dashboards tracking 10+ KPIs, enhancing real-time visibility for stakeholders across Sales, Pricing, and Operations.
+\item Collaborated with cross-functional teams (Sales, Pricing, Supply Chain, Marketing) to translate business requirements into actionable data insights and reporting solutions.
+\item Integrated AWS and Azure data sources to streamline reporting workflows and improve data accessibility across systems.
+\end{itemize}
+
+\textbf{Data Analyst (Machine Learning Project), Slash Mark IT Solutions Pvt. Ltd.}
+\hfill \textit{Dec 2022 -- May 2023}
+\begin{itemize}[leftmargin=*]
+\item Improved XGBoost models achieving 78.6\% accuracy, improving predictive performance and supporting data-driven decision-making.
+\item Built end-to-end ML pipelines including data preprocessing, feature engineering, model training, and evaluation, enhancing model reliability and scalability.
+\item Applied statistical techniques, feature engineering, and model evaluation methods to improve model performance and reliability.
+\item Delivered visual insights and reports to support stakeholder understanding and data-driven decisions.
+\end{itemize}
+
+\textbf{Data Analyst, HCLTech, Hyderabad, India}
+\hfill \textit{Oct 2021 -- Oct 2022}
+\begin{itemize}[leftmargin=*]
+\item Analyzed large datasets using SQL and Python to identify inconsistencies, improve data quality, and lower processing errors by 25\%.
+\item Designed Power BI dashboards tracking 10+ KPIs, improving performance visibility and enabling faster decision-making for finance and operations teams.
+\item Supported ETL workflows and data migration across multiple systems, enhanced data accuracy by 20\%, reducing reporting discrepancies and enhancing data reliability across systems.
+\item Conducted ad-hoc and trend analysis on 10+ datasets, decreased reporting turnaround time by 25\%, enabling faster business decision-making through optimized data workflows.
+\end{itemize}
+
+\section*{Projects}
+
+\textbf{Retail Pricing Optimization Analysis -- Excel, SQL, Power BI}
+\begin{itemize}[leftmargin=*]
+\item Assessed 100K+ retail transactions using SQL, Python, and Power BI to identify pricing inefficiencies and demand patterns, uncovering opportunities for 8--12\% margin improvement.
+\item Identified underpriced and overpriced SKUs, enabling potential margin improvement of 8--12\% and supporting data-driven pricing strategy.
+\end{itemize}
+
+\textbf{Customer Churn Analysis \& Retention Strategy -- Excel, SQL, Power BI}
+\begin{itemize}[leftmargin=*]
+\item Investigated 50K+ customer records to identify churn drivers and behavioral patterns, enabling targeted retention strategies that could reduce churn by 15--20\%.
+\item Developed retention strategies based on behavioral insights, potentially reducing churn by 15--20\% and improving customer lifetime value.
+\end{itemize}
+
+\textbf{Supply Chain \& Inventory Performance Analysis -- Excel, SQL, Power BI}
+\begin{itemize}[leftmargin=*]
+\item Evaluated supply chain data across 20+ SKUs to identify stockouts and demand variability, recommending strategies that reduced stockouts by 18\% and improved fulfillment efficiency.
+\item Recommended inventory optimization strategies reducing stockouts by 18\% and improving order fulfillment efficiency.
+\end{itemize}
+
+\section*{Education}
+\textbf{Grand Valley State University, Grand Rapids, MI}
+\hfill \textit{Aug 2024 -- Expected Apr 2026}
+
+Master of Science in Data Science and Analytics
+
+\textbf{R.V.R \& J.C College of Engineering, Guntur, India}
+\hfill \textit{Apr 2020 -- Apr 2024}
+
+Bachelor of Technology in Information Technology
+
+\section*{Certifications}
+\begin{itemize}[leftmargin=*]
+\item Microsoft Certified Power BI Data Analyst Associate
+\item Google Data Analytics Professional Certificate -- Coursera
+\item SQL (Advanced) -- HackerRank
+\item NPTEL: Data Mining, Machine Learning, DSA using Python
 \end{itemize}
 
 \end{document}
@@ -368,7 +438,6 @@ def extract_library_skills(text: str):
     return found
 
 def extract_skills_from_text(text: str):
-    # Only use the controlled skill library
     return extract_library_skills(text)
 
 def find_missing_skills(job_description: str, resume_text: str):
@@ -394,29 +463,42 @@ def get_resources_for_skill(skill: str):
         ("Search More", youtube_link),
     ]
 
-def build_ai_prompt(job_description: str, missing_skills: list[str]) -> str:
+def build_ai_prompt(job_description: str, missing_skills: list[str], resume_text: str) -> str:
     missing_text = ", ".join(missing_skills) if missing_skills else "None"
 
     return f"""
-Only paraphrase bullets that you update. Do not paraphrase or alter any bullet that you do not touch.
-Untouched bullets must remain verbatim.
-You may paraphrase only bullets where you added JD-relevant skills or modified existing skills according to the JD.
-This is mandatory: merge JD-relevant additions directly into existing bullets so they read as a single sentence.
-Do not remove bullets unless explicitly required.
-You may add a new point only if merging or modifying is not reasonably possible.
-When modifying an existing bullet, make sure it is not shorter than the original; it can be longer, but not shorter.
-The Technical Skills section may be freely updated to add or replace tools from the JD, but keep the category labels in the same style.
-Use only technologies, tools, and concepts from the base resume or the JD. Do not introduce anything external.
-The new LaTeX must match the original resume style exactly, including margins, spacing, line spacing, and structure.
-Provide updated LaTeX inline only.
-Do not use markdown fences.
-Each JD request is independent and must always start from the original base resume.
+You are an expert LaTeX resume writer.
 
-Missing skills from JD compared to resume:
+TASK:
+Generate a FULL LaTeX resume code tailored to the job description.
+
+STRICT RULES:
+1. Return ONLY complete LaTeX code.
+2. The output must be a full compilable LaTeX document from \\documentclass to \\end{{document}}.
+3. Keep the same layout, spacing, margins, and style as the base resume.
+4. Use the base resume as the starting structure.
+5. Update summary, technical skills, experience bullets, and projects to better align with the JD.
+6. Keep content realistic and based only on the provided resume text, base resume, and JD.
+7. Do not invent fake companies, fake dates, or fake experience.
+8. You may strengthen wording and merge JD-relevant skills into existing bullets.
+9. Include all major sections:
+   - Header
+   - Professional Summary
+   - Technical Skills
+   - Professional Experience
+   - Projects
+   - Education
+   - Certifications
+10. Output only raw LaTeX, with no markdown fences and no explanation.
+
+MISSING SKILLS:
 {missing_text}
 
 BASE RESUME LATEX:
 {BASE_RESUME_LATEX}
+
+RESUME TEXT:
+{resume_text}
 
 JOB DESCRIPTION:
 {job_description}
@@ -425,17 +507,27 @@ JOB DESCRIPTION:
 def get_openai_client():
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise ValueError("OPENAI_API_KEY not found. Set it before running the app.")
+        try:
+            api_key = st.secrets["OPENAI_API_KEY"]
+        except Exception:
+            api_key = None
+
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY not found. Add it locally or in Streamlit Secrets.")
     if OpenAI is None:
         raise ValueError("openai package not installed. Run: pip install openai")
     return OpenAI(api_key=api_key)
 
 @st.cache_data(show_spinner=False)
-def cached_generate_latex(job_description: str, missing_skills_key: str):
+def cached_generate_latex(job_description: str, missing_skills_key: str, resume_text: str):
     client = get_openai_client()
     missing_skills = missing_skills_key.split("|||") if missing_skills_key else []
 
-    prompt = build_ai_prompt(job_description=job_description, missing_skills=missing_skills)
+    prompt = build_ai_prompt(
+        job_description=job_description,
+        missing_skills=missing_skills,
+        resume_text=resume_text
+    )
 
     response = client.responses.create(
         model=MODEL_NAME,
@@ -450,7 +542,7 @@ def cached_generate_latex(job_description: str, missing_skills_key: str):
 # UI
 # ----------------------------
 st.title("📄 Universal Skill Gap Matcher")
-st.caption("Upload your resume, paste a job description, find missing skills, and get learning resources.")
+st.caption("Upload your resume, paste a job description, find missing skills, get learning resources, and generate a full LaTeX resume.")
 st.markdown(f"**AI model:** `{MODEL_NAME}`")
 
 uploaded_resume = st.file_uploader("Upload your resume", type=["pdf", "docx", "txt"])
@@ -480,7 +572,7 @@ col1, col2 = st.columns(2)
 with col1:
     analyze = st.button("Find Missing Skills", type="primary", use_container_width=True)
 with col2:
-    generate = st.button("Generate LaTeX Resume", use_container_width=True)
+    generate = st.button("Generate Full LaTeX Resume", use_container_width=True)
 
 if analyze:
     if uploaded_resume is None:
@@ -524,7 +616,9 @@ if analyze:
             st.write("No resources needed because no missing skills were found.")
 
 if generate:
-    if not job_description.strip():
+    if uploaded_resume is None:
+        st.warning("Please upload your resume first.")
+    elif not job_description.strip():
         st.warning("Please paste the job description.")
     elif not use_ai:
         st.warning("Enable AI Resume Generation first.")
@@ -533,22 +627,40 @@ if generate:
             st.error(f"Daily AI limit reached ({MAX_AI_CALLS} calls).")
         else:
             try:
-                missing_skills_key = "|||".join(st.session_state.missing_skills)
-                with st.spinner("Generating tailored LaTeX resume..."):
-                    latex_code = cached_generate_latex(
-                        normalize_text(job_description),
-                        missing_skills_key
-                    )
+                resume_text = read_uploaded_resume(uploaded_resume)
+                resume_text = normalize_text(resume_text)
 
-                st.session_state.api_calls += 1
-                st.session_state.latex_code = latex_code
-                st.success("LaTeX resume generated successfully.")
+                if not resume_text:
+                    st.error("Could not extract resume text.")
+                else:
+                    # If user did not click Analyze first, compute skills now
+                    if not st.session_state.jd_skills and not st.session_state.resume_skills:
+                        jd_skills, resume_skills, missing_skills = find_missing_skills(
+                            normalize_text(job_description),
+                            resume_text
+                        )
+                        st.session_state.jd_skills = jd_skills
+                        st.session_state.resume_skills = resume_skills
+                        st.session_state.missing_skills = missing_skills
+
+                    missing_skills_key = "|||".join(st.session_state.missing_skills)
+
+                    with st.spinner("Generating full LaTeX resume..."):
+                        latex_code = cached_generate_latex(
+                            normalize_text(job_description),
+                            missing_skills_key,
+                            resume_text
+                        )
+
+                    st.session_state.api_calls += 1
+                    st.session_state.latex_code = latex_code
+                    st.success("Full LaTeX resume generated successfully.")
 
             except Exception as e:
                 st.error(f"AI generation failed: {str(e)}")
 
 if st.session_state.latex_code:
-    st.subheader("Generated LaTeX Resume")
+    st.subheader("Generated Full LaTeX Resume")
     st.text_area("LaTeX Output", st.session_state.latex_code, height=500)
 
     st.download_button(
